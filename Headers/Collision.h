@@ -8,15 +8,13 @@ class Collision
 {
 private:
     GameObject* owner;
-    GameObject** objs;
-    int nrOfObjs;
 
 public:
     Collision();
-    Collision(GameObject* owner, GameObject** objs, int nrOfObjs);
+    Collision(GameObject* owner);
     ~Collision();
 
-    int checkCollision();
+    int checkCollision(const GameObject &other) const;
 
 };
 

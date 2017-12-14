@@ -6,25 +6,31 @@
 #include "GameObject.h"
 #include "Player.h"
 #include "Enemy.h"
+
 #include <string>
 
 class Game
 {
 private:
+    // Window and rendering
     sf::RenderWindow* window;
     int winWidth;
     int winHeight;
     float timeScale;
 
+    // GameObjects
     Player* player;
 
     int aliensX;
     int aliensY;
     Enemy** aliens;
+    int nrOfAliens;
 
     GameObject** gameObjs;
     int nrOfGameObjects;
 
+
+    //Game textures
     sf::Texture* playerTexture;
     sf::Texture* alienType1Texture;
     sf::Texture* alienType2Texture;

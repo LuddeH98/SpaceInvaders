@@ -60,7 +60,7 @@ void Animator::animate()
 {
     updateTime += (float)t / CLOCKS_PER_SEC;
 
-    if (updateTime > animationSpeed)
+    if (updateTime * (animationSpeed * 0.75) > 1000)
     {
         if (currentFrame < maxFrames)
         {

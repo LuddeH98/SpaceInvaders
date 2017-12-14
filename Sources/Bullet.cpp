@@ -1,12 +1,16 @@
 #include "../Headers/Bullet.h"
 
-Bullet::Bullet(GameObject** objs, int nrOfObjs, sf::Vector2f position, sf::Texture* texture, sf::Vector2f scale) : GameObject(position, texture, scale)
+Bullet::Bullet() : GameObject()
 {
-    this->objs = objs;
     this->active = false;
-    this->movementSpeed = 1.0f;
-    this->nrOfObjs = nrOfObjs;
-    this->col = Collision(GameObject::getGameObject(), objs, nrOfObjs);
+    this->movementSpeed = 50.0f;
+
+    // Dynamically allocated texture will be deleted by the sprite
+    this->tex = new sf::Texture();
+    this->tex->loadFromFile("/Users/ludwighansson/Desktop/SpaceInvaders/Resources/bullet.png");
+    this->GameObject::getCharacter()->setTexture(*tex, true);
+    this->GameObject::getCharacter()->setOrigin(GameObject::getCharacter()->getLocalBounds().width / 2, GameObject::getCharacter()->getLocalBounds().height / 2);
+    this->GameObject::getCharacter()->setScale(2, 2);
 }
 
 Bullet::~Bullet()
@@ -24,6 +28,12 @@ bool Bullet::isActive()
     return this->active;
 }
 
+void Bullet::launch(sf::Vector2f startPos)
+{
+    this->active = true;
+    GameObject::getCharacter()->setPosition(startPos);
+}
+
 void Bullet::setMovementSpeed(float speed)
 {
     this->movementSpeed = speed;
@@ -36,8 +46,21 @@ void Bullet::setActive(bool active)
 
 void Bullet::move(sf::Vector2f direction, float dt)
 {
-    if ()
+    if (this->active)
     {
-
+        if (GameObject::getCharacter()->getPosition().y < -50)
+        {
+            this->active = false;
+        }
+        GameObject::getCharacter()->move(direction * dt * movementSpeed);
     }
+}
+
+void Bullet::draw(sf::RenderWindow* window)
+{
+    if (this->active)
+    {
+        window->draw(*GameObject::getCharacter());
+    }
+
 }

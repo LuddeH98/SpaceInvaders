@@ -10,6 +10,7 @@ private:
     sf::Sprite* character;
     Animator anim;
 
+
 public:
 
     GameObject();
@@ -22,12 +23,13 @@ public:
     GameObject& operator=(const GameObject &other);
 
     sf::Vector2f getPosition();
-    sf::Sprite* getCharacter();
+    sf::Sprite* getCharacter() const;
     GameObject* getGameObject();
 
     void setCharacter(sf::Sprite Character);
     virtual void move(sf::Vector2f direction, float dt) = 0;
-    void animate();
+    virtual void draw(sf::RenderWindow* window) = 0;
+    void animate(float speed);
 
 };
 

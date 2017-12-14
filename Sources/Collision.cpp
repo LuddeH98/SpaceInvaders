@@ -1,10 +1,13 @@
 #include "../Headers/Collision.h"
 
-Collision::Collision(GameObject* owner, GameObject** objs, int nrOfObjs)
+Collision::Collision(GameObject* owner)
 {
-    this->objs = objs;
-    this->nrOfObjs = nrOfObjs;
     this->owner = owner;
+}
+
+Collision::Collision()
+{
+
 }
 
 Collision::~Collision()
@@ -12,15 +15,7 @@ Collision::~Collision()
 
 }
 
-int Collision::checkCollision()
+int Collision::checkCollision(const GameObject &other) const
 {
-    int index = -1;
-    for (int i = 0; i < this->nrOfObjs && index == -1; i++)
-    {
-        if (owner->getCharacter()->getGlobalBounds().intersects(objs[i]->getCharacter()->getGlobalBounds()))
-        {
-            index = i;
-        }
-    }
-    return index;
+    return (owner->getCharacter()->getGlobalBounds().intersects(other.getCharacter()->getGlobalBounds()));
 }

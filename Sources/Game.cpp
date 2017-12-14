@@ -36,8 +36,9 @@ void Game::start()
     this->player = new Player("Ron", sf::Vector2f(winWidth / 2, winHeight - 100), playerTexture, sf::Vector2f(5.0f, 5.0f));
 
     // Initializing an array with x alines wide, and y aliens high
-    this->aliensX = 5;
-    this->aliensY = 3;
+    this->aliensX = 8;
+    this->aliensY = 4;
+    this->nrOfAliens = aliensX * aliensY;
     this->aliens = new Enemy*[aliensX];
     for (int i = 0; i < aliensX; i++)
     {
@@ -48,24 +49,9 @@ void Game::start()
     {
         for (int j = 0; j < aliensY; j++)
         {
-            this->aliens[i][j] = Enemy(2, sf::Vector2f(winWidth / 2 + (100 * i) , 100 + (j * 70)), alienType2Texture, sf::Vector2f(3.0f, 3.0f), sf::IntRect(0,0, 25, 20), 2);
+            this->aliens[i][j] = Enemy(2, sf::Vector2f(winWidth / 4 + (110 * i) , 100 + (j * 100)), alienType2Texture, sf::Vector2f(3.5f, 3.5f), sf::IntRect(0,0, 25, 20), 2);
         }
     }
-
-    // Saving all gameobjects in a array to easily manage them while
-    this->nrOfGameObjects = (this->aliensX * this->aliensY) + 1;
-    this->gameObjs = new GameObject*[nrOfGameObjects];
-
-    this->gameObjs[0] = player;
-    //Player has been added manuallay
-    for (int i = 1; i < nrOfGameObjects; i++)
-    {
-        for (int j = 0; j < nrOfGameObjects; j++)
-        {
-            gameObjs[i * j] = &aliens[i][j];
-        }
-    }
-
 }
 
 void Game::update(float &deltaTime, float &gameTime)
@@ -76,9 +62,25 @@ void Game::update(float &deltaTime, float &gameTime)
     {
         for (int j = 0; j < aliensY; j++)
         {
-            aliens[i][j].move(sf::Vector2f(1.0f, 0.0f), deltaTime * timeScale);
+            if (aliens[i][j].isAlive())
+            {
+                if (aliens[i][j].checkCollision(player->getBullet()) && player->getBullet().isActive())
+                {
+                    aliens[i][j].kill();
+                    player->getBullet().setActive(false);
+                    nrOfAliens--;
+                    std::cout << "col with alien[" << i << "][" << j << "]" << std::endl;
+                    aliens[i][j].setMovementSpeed(8.0f);
+                }
+
+                //std::cout << "movementspeed: " << 60.0f / (nrOfAliens * 0.25f) << std::endl;
+                aliens[i][j].move(sf::Vector2f(1.0f, 0.0f), deltaTime * timeScale);
+            }
+
         }
     }
+
+    ;
 
     render();
 }
@@ -93,13 +95,12 @@ void Game::render()
     {
         for (int j = 0; j < aliensY; j++)
         {
-            window->draw(aliens[i][j].getDrawable());
-
+            aliens[i][j].draw(window);
         }
     }
 
     // Draw Player
-    window->draw(player->getDrawable());
+    player->draw(window);
     window->display();
 }
 

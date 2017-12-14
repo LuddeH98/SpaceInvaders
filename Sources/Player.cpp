@@ -12,6 +12,7 @@ Player::Player()
     this->name = "?";
     this->movementSpeed = 10.0f;
     this->input = InputManager();
+    this->b = Bullet();
 
 }
 
@@ -23,7 +24,7 @@ Player::Player(std::string name, sf::Vector2f position, sf::Texture* texture, sf
     this->name = name;
     this->movementSpeed = 20.0f;
     this->input = InputManager();
-
+    this->b = Bullet();
 }
 
 Player::~Player()
@@ -46,6 +47,11 @@ std::string Player::getName()
     return this->name;
 }
 
+Bullet& Player::getBullet()
+{
+    return this->b;
+}
+
 void Player::movement(float dt, int timeScale)
 {
     if (input.getKey(sf::Keyboard::A) && getPosition().x > 70)
@@ -57,10 +63,28 @@ void Player::movement(float dt, int timeScale)
     {
         move(sf::Vector2f(15.0f, 0.0f), dt * timeScale);
     }
+
+    if (input.getKey(sf::Keyboard::Space))
+    {
+
+        fire();
+
+    }
+
+    if (b.isActive())
+    {
+        b.move(sf::Vector2f(0, -20), dt);
+    }
 }
 
 void Player::fire()
 {
+    if (!b.isActive())
+    {
+        b.launch(sf::Vector2f(GameObject::getCharacter()->getPosition()));
+        b.setActive(true);
+    }
+
 
 }
 
@@ -82,4 +106,10 @@ sf::Sprite Player::getDrawable()
 void Player::move(sf::Vector2f direction, float dt)
 {
     GameObject::getCharacter()->move(direction * dt * movementSpeed);
+}
+
+void Player::draw(sf::RenderWindow* window)
+{
+    window->draw(*GameObject::getCharacter());
+    b.draw(window);
 }

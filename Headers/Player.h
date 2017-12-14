@@ -17,6 +17,7 @@ private:
     std::string name;
     InputManager input;
 
+    Bullet b;
 
 public:
     Player();
@@ -26,7 +27,7 @@ public:
     int getScore();
     int getLives();
     std::string getName();
-
+    Bullet& getBullet();
 
     void fire();
     void addScore(int score);
@@ -35,6 +36,7 @@ public:
     void movement(float dt, int timeScale);
     virtual void move(sf::Vector2f direction, float dt);
     void setMovementSpeed(float speed);
+    virtual void draw(sf::RenderWindow* window);
 
 };
 

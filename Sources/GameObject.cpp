@@ -4,7 +4,9 @@
 
 GameObject::GameObject()
 {
-    this->character = nullptr;
+    this->character = new sf::Sprite();
+    this->character->setPosition(sf::Vector2f(0,0));
+    //this->character->setOrigin(character->getLocalBounds().width / 2, character->getLocalBounds().height / 2);
 }
 
 GameObject::GameObject(sf::Vector2f position, sf::Texture* texture, sf::Vector2f scale)
@@ -54,7 +56,7 @@ sf::Vector2f GameObject::getPosition()
     return this->character->getPosition();
 }
 
-sf::Sprite* GameObject::getCharacter()
+sf::Sprite* GameObject::getCharacter() const
 {
     return this->character;
 }
@@ -64,7 +66,8 @@ GameObject* GameObject::getGameObject()
     return this;
 }
 
-void GameObject::animate()
+void GameObject::animate(float speed)
 {
     this->anim.animate();
+    this->anim.setAnamtionSpeed(speed);
 }

@@ -5,10 +5,11 @@
 
 bool Enemy::goLeft = true;
 int Enemy::moveDown = 0;
+float Enemy::movementSpeed = 10.0f;
 
 Enemy::Enemy()
 {
-
+    this->col = Collision(this);
 }
 
 Enemy::Enemy(int alienType, sf::Vector2f position, sf::Texture* texture, sf::Vector2f scale, sf::IntRect frameSize, int maxFrames)
@@ -16,8 +17,8 @@ Enemy::Enemy(int alienType, sf::Vector2f position, sf::Texture* texture, sf::Vec
 {
     this->alienType = alienType;
     this->alive = true;
-    this->movementSpeed = 100.0f;
     this->startPosY = position.y;
+    this->col = Collision(this);
 }
 
 Enemy::~Enemy()
@@ -47,43 +48,75 @@ Enemy& Enemy::operator=(const Enemy &other)
     return *this;
 }
 
+bool Enemy::checkCollision(const GameObject &other)
+{
+    return col.checkCollision(other);
+}
+
 void Enemy::move(sf::Vector2f direction, float dt)
 {
-    if (this->goLeft)
+    if (this->alive)
     {
-        if (GameObject::getCharacter()->getPosition().x < 50)
+        if (this->goLeft)
         {
-            this->goLeft = false;
-            this->moveDown += 30;
+            if (GameObject::getCharacter()->getPosition().x < 50)
+            {
+                this->goLeft = false;
+                this->moveDown += 30;
+            }
+            else
+            {
+                GameObject::getCharacter()->move((direction * -1.0f) * dt * movementSpeed);
+            }
+            //std::cout << "Left: " << goLeft << std::endl;
+
         }
         else
         {
-            GameObject::getCharacter()->move((direction * -1.0f) * dt * movementSpeed);
+            if (GameObject::getCharacter()->getPosition().x > 1550)
+            {
+                this->goLeft = true;
+                this->moveDown += 30;
+            }
+            else
+            {
+                GameObject::getCharacter()->move((direction) * dt * movementSpeed);
+            }
+            //std::cout << "right: " << goLeft << std::endl;
         }
-        //std::cout << "Left: " << goLeft << std::endl;
+
+        GameObject::animate(this->movementSpeed);
+
+        GameObject::getCharacter()->setPosition(GameObject::getCharacter()->getPosition().x, startPosY + moveDown);
 
     }
-    else
-    {
-        if (GameObject::getCharacter()->getPosition().x > 1550)
-        {
-            this->goLeft = true;
-            this->moveDown += 30;
-        }
-        else
-        {
-            GameObject::getCharacter()->move((direction) * dt * movementSpeed);
-        }
-        //std::cout << "right: " << goLeft << std::endl;
-    }
-
-    GameObject::animate();
-
-    GameObject::getCharacter()->setPosition(GameObject::getCharacter()->getPosition().x, startPosY + moveDown);
 
 }
 
 sf::Sprite& Enemy::getDrawable()
 {
     return *GameObject::getCharacter();
+}
+
+void Enemy::draw(sf::RenderWindow* window)
+{
+    if (this->alive)
+    {
+        window->draw(*GameObject::getCharacter());
+    }
+
+}
+bool Enemy::isAlive()
+{
+    return this->alive;
+}
+
+void Enemy::kill()
+{
+    this->alive = false;
+}
+
+void Enemy::setMovementSpeed(float speed)
+{
+    this->movementSpeed += speed;
 }
