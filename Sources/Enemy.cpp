@@ -9,7 +9,7 @@ float Enemy::movementSpeed = 10.0f;
 
 Enemy::Enemy()
 {
-    this->col = Collision(this);
+
 }
 
 Enemy::Enemy(int alienType, sf::Vector2f position, sf::Texture* texture, sf::Vector2f scale, sf::IntRect frameSize, int maxFrames)
@@ -18,7 +18,6 @@ Enemy::Enemy(int alienType, sf::Vector2f position, sf::Texture* texture, sf::Vec
     this->alienType = alienType;
     this->alive = true;
     this->startPosY = position.y;
-    this->col = Collision(this);
 }
 
 Enemy::~Enemy()
@@ -48,64 +47,46 @@ Enemy& Enemy::operator=(const Enemy &other)
     return *this;
 }
 
-bool Enemy::checkCollision(const GameObject &other)
-{
-    return col.checkCollision(other);
-}
-
 void Enemy::move(sf::Vector2f direction, float dt)
 {
     if (this->alive)
     {
         if (this->goLeft)
         {
-            if (GameObject::getCharacter()->getPosition().x < 50)
+            if (getPosition().x < 50)
             {
                 this->goLeft = false;
                 this->moveDown += 30;
             }
             else
             {
-                GameObject::getCharacter()->move((direction * -1.0f) * dt * movementSpeed);
+                GameObject::move((direction * -1.0f) * dt * movementSpeed);
             }
             //std::cout << "Left: " << goLeft << std::endl;
 
         }
         else
         {
-            if (GameObject::getCharacter()->getPosition().x > 1550)
+            if (GameObject::getPosition().x > 1550)
             {
                 this->goLeft = true;
                 this->moveDown += 30;
             }
             else
             {
-                GameObject::getCharacter()->move((direction) * dt * movementSpeed);
+                GameObject::move((direction) * dt * movementSpeed);
             }
             //std::cout << "right: " << goLeft << std::endl;
         }
 
         GameObject::animate(this->movementSpeed);
 
-        GameObject::getCharacter()->setPosition(GameObject::getCharacter()->getPosition().x, startPosY + moveDown);
+        GameObject::setPosition(sf::Vector2f(GameObject::getPosition().x, startPosY + moveDown));
 
     }
 
 }
 
-sf::Sprite& Enemy::getDrawable()
-{
-    return *GameObject::getCharacter();
-}
-
-void Enemy::draw(sf::RenderWindow* window)
-{
-    if (this->alive)
-    {
-        window->draw(*GameObject::getCharacter());
-    }
-
-}
 bool Enemy::isAlive()
 {
     return this->alive;

@@ -16,12 +16,13 @@ private:
     float movementSpeed;
     std::string name;
     InputManager input;
+    sf::RenderWindow* window;
 
     Bullet b;
 
 public:
     Player();
-    Player(std::string name, sf::Vector2f position, sf::Texture* texture, sf::Vector2f scale);
+    Player(sf::RenderWindow* window, std::string name, sf::Vector2f position, sf::Texture* texture, sf::Vector2f scale);
     virtual ~Player();
 
     int getScore();
@@ -33,10 +34,10 @@ public:
     void addScore(int score);
     void setPosition(sf::Vector2f position);
     sf::Sprite getDrawable();
+    void drawBullet();
     void movement(float dt, int timeScale);
     virtual void move(sf::Vector2f direction, float dt);
     void setMovementSpeed(float speed);
-    virtual void draw(sf::RenderWindow* window);
 
 };
 

@@ -10,10 +10,10 @@ private:
     float movementSpeed;
     bool active;
     sf::Texture* tex;
+    sf::RenderWindow* window;
 
 public:
-    Bullet();
-    //Bullet(sf::Vector2f position, sf::Texture* texture, sf::Vector2f scale);
+    Bullet(sf::RenderWindow* window = nullptr);
     ~Bullet();
 
     float getMovementSpeed();
@@ -22,8 +22,7 @@ public:
     void launch(sf::Vector2f position);
     void setMovementSpeed(float speed);
     void setActive(bool active);
-    virtual void move(sf::Vector2f direction, float dt);
-    virtual void draw(sf::RenderWindow* window);
+    void move(sf::Vector2f direction, float dt);
 
 
 

@@ -12,7 +12,7 @@ int main()
 {
     int screenScale = 2;
     int screenWidth = 800 * screenScale;
-    int screenHeight = 600 * screenScale;
+    int screenHeight = 800 * screenScale;
 
     clock_t t = clock();
     float deltaTime = 0.0f;

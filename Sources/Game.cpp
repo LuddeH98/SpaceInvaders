@@ -9,6 +9,7 @@ Game::Game(sf::RenderWindow* window)
     this->winWidth = window->getSize().x;
     this->winHeight = window->getSize().y;
     this->timeScale = 1.5f;
+    this->textLayer = GUI(window);
 
     start();
 
@@ -33,11 +34,11 @@ void Game::start()
     this->alienType3Texture->loadFromFile("/Users/ludwighansson/Desktop/SpaceInvaders/Resources/Alien3.png");
 
     // Initializing and spawning the player
-    this->player = new Player("Ron", sf::Vector2f(winWidth / 2, winHeight - 100), playerTexture, sf::Vector2f(5.0f, 5.0f));
+    this->player = new Player(window, "Ron", sf::Vector2f(winWidth / 2, winHeight - 200), playerTexture, sf::Vector2f(4.0f, 4.0f));
 
     // Initializing an array with x alines wide, and y aliens high
-    this->aliensX = 8;
-    this->aliensY = 4;
+    this->aliensX = 11;
+    this->aliensY = 5;
     this->nrOfAliens = aliensX * aliensY;
     this->aliens = new Enemy*[aliensX];
     for (int i = 0; i < aliensX; i++)
@@ -45,13 +46,31 @@ void Game::start()
         this->aliens[i] = new Enemy[aliensY];
     }
 
+    int alienOffset = 105;
+    float alienScaleFactor = 3.0f;
+
     for (int i = 0; i < aliensX; i++)
     {
         for (int j = 0; j < aliensY; j++)
         {
-            this->aliens[i][j] = Enemy(2, sf::Vector2f(winWidth / 4 + (110 * i) , 100 + (j * 100)), alienType2Texture, sf::Vector2f(3.5f, 3.5f), sf::IntRect(0,0, 25, 20), 2);
+            if (j == 0)
+            {
+                this->aliens[i][j] = Enemy(3, sf::Vector2f(winWidth / 4 + (alienOffset * i) , 100 + (j * alienOffset)), alienType3Texture, sf::Vector2f(alienScaleFactor, alienScaleFactor), sf::IntRect(0,0, 16, 16), 2);
+            }
+            else if (j < 2)
+            {
+                this->aliens[i][j] = Enemy(2, sf::Vector2f(winWidth / 4 + (alienOffset * i) , 100 + (j * alienOffset)), alienType2Texture, sf::Vector2f(alienScaleFactor, alienScaleFactor), sf::IntRect(0,0, 22, 16), 2);
+            }
+            else
+            {
+                this->aliens[i][j] = Enemy(1, sf::Vector2f(winWidth / 4 + (alienOffset * i) , 100 + (j * alienOffset)), alienType1Texture, sf::Vector2f(alienScaleFactor, alienScaleFactor), sf::IntRect(0,0, 24, 16), 2);
+            }
+
+
         }
     }
+
+    this->test.setPosition(sf::Vector2f(winWidth / 2, winHeight - (winHeight / 4)));
 }
 
 void Game::update(float &deltaTime, float &gameTime)
@@ -70,7 +89,7 @@ void Game::update(float &deltaTime, float &gameTime)
                     player->getBullet().setActive(false);
                     nrOfAliens--;
                     std::cout << "col with alien[" << i << "][" << j << "]" << std::endl;
-                    aliens[i][j].setMovementSpeed(8.0f);
+                    aliens[i][j].setMovementSpeed(4.0f);
                 }
 
                 //std::cout << "movementspeed: " << 60.0f / (nrOfAliens * 0.25f) << std::endl;
@@ -95,12 +114,19 @@ void Game::render()
     {
         for (int j = 0; j < aliensY; j++)
         {
-            aliens[i][j].draw(window);
+            if (aliens[i][j].isAlive())
+            {
+                aliens[i][j].draw(window);
+            }
+
         }
     }
 
     // Draw Player
+    test.draw(window);
+    textLayer.draw(2);
     player->draw(window);
+    player->drawBullet();
     window->display();
 }
 

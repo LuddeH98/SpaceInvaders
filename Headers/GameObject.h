@@ -22,13 +22,16 @@ public:
     GameObject(const GameObject &other);
     GameObject& operator=(const GameObject &other);
 
-    sf::Vector2f getPosition();
-    sf::Sprite* getCharacter() const;
-    GameObject* getGameObject();
+    void setSprite(sf::Sprite* sprite);
+    void setPosition(sf::Vector2f position);
 
-    void setCharacter(sf::Sprite Character);
-    virtual void move(sf::Vector2f direction, float dt) = 0;
-    virtual void draw(sf::RenderWindow* window) = 0;
+    bool checkCollision(const GameObject &other);
+
+    sf::Vector2f getPosition();
+    Animator* getAnimator();
+
+    void move(sf::Vector2f direction);
+    void draw(sf::RenderWindow* window);
     void animate(float speed);
 
 };

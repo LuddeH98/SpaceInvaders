@@ -51,23 +51,45 @@ GameObject& GameObject::operator=(const GameObject &other)
 
 }
 
+void GameObject::setSprite(sf::Sprite* sprite)
+{
+    delete this->character;
+    this->character = sprite;
+}
+
+void GameObject::setPosition(sf::Vector2f position)
+{
+    this->character->setPosition(position);
+}
+
 sf::Vector2f GameObject::getPosition()
 {
     return this->character->getPosition();
 }
 
-sf::Sprite* GameObject::getCharacter() const
+bool GameObject::checkCollision(const GameObject &other)
 {
-    return this->character;
+    return this->character->getGlobalBounds().intersects(other.character->getGlobalBounds());
 }
 
-GameObject* GameObject::getGameObject()
+Animator* GameObject::getAnimator()
 {
-    return this;
+    return &this->anim;
 }
 
 void GameObject::animate(float speed)
 {
     this->anim.animate();
     this->anim.setAnamtionSpeed(speed);
+}
+
+void GameObject::draw(sf::RenderWindow* window)
+{
+    window->draw(*this->character);
+}
+
+void GameObject::move(sf::Vector2f direction)
+{
+    this->character->move(direction);
+
 }

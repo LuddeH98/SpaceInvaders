@@ -2,10 +2,13 @@
 #define GAME_H
 
 #include <SFML/Graphics.hpp>
-#include "InputManager.h"
-#include "GameObject.h"
-#include "Player.h"
-#include "Enemy.h"
+#include "../Headers/InputManager.h"
+#include "../Headers/GameObject.h"
+#include "../Headers/Player.h"
+#include "../Headers/Shield.h"
+#include "../Headers/Enemy.h"
+#include "../Headers/GUI.h"
+
 
 #include <string>
 
@@ -30,6 +33,8 @@ private:
     int nrOfGameObjects;
 
 
+    Shield test;
+
     //Game textures
     sf::Texture* playerTexture;
     sf::Texture* alienType1Texture;
@@ -37,6 +42,7 @@ private:
     sf::Texture* alienType3Texture;
 
     InputManager input;
+    GUI textLayer;
 
     bool loadTexture(std::string path, sf::Sprite object);
     void freeUpMemory();
