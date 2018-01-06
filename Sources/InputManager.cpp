@@ -1,5 +1,6 @@
 #include "../Headers/InputManager.h"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 InputManager::InputManager()
 {
@@ -21,4 +22,14 @@ bool InputManager::getKey(sf::Keyboard::Key inputKey) const
     }
 
     return isPressed;
+}
+
+bool InputManager::getKeyDown(sf::Keyboard::Key inputKey) const
+{
+    return false;//event->type == sf::Event::KeyPressed && event->key.code == inputKey;
+}
+
+bool InputManager::getKeyReleased(sf::Keyboard::Key inputKey, sf::Event* event) const
+{
+    return event->type == sf::Event::KeyReleased && event->key.code == inputKey;
 }

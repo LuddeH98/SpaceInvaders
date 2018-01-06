@@ -54,15 +54,23 @@ void Bullet::setActive(bool active)
     this->active = active;
 }
 
+void Bullet::setColor(sf::Color color)
+{
+    setSpriteColor(color);
+}
+
 void Bullet::move(sf::Vector2f direction, float dt)
 {
+
     if (this->active)
     {
-        if (getPosition().y < -50)
+        if (getPosition().y > window->getSize().y - 140 || getPosition().y < - 50)
         {
             this->active = false;
+            //std::cout << this->getPosition().y << std::endl;
         }
         GameObject::move(direction * dt * movementSpeed);
-        //std::cout << window << std::endl;
+        //std::cout << this->getPosition().y << std::endl;
+
     }
 }

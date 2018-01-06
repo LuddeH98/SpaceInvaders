@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "../Headers/GameObject.h"
+#include "../Headers/Bullet.h"
 
 class Shield
 {
@@ -20,8 +21,10 @@ public:
     Shield();
     ~Shield();
 
-    bool checkCollision(const GameObject &other);
+    bool checkCollision(int i, int j, Bullet &other);
     void setPosition(sf::Vector2f position);
+    float getHeight();
+    float getWidth();
     void reset();
     void draw(sf::RenderWindow* window);
 };

@@ -26,6 +26,23 @@ Shield::Shield()
             cells[i][j].setOrigin(cellWidth / 2, cellHeight / 2);
             cells[i][j].setPosition((i * cellWidth), (j * cellHeight));
             cells[i][j].setFillColor(sf::Color::Green);
+
+            if (i == 0 || i == cellsX - 1)
+            {
+                if (j == 0)
+                {
+                    cells[i][j].setFillColor(sf::Color::Black);
+                }
+
+            }
+
+            if (i >= 2 && i <= cellsX - 3)
+            {
+                if (j == cellsY - 1)
+                {
+                    cells[i][j].setFillColor(sf::Color::Black);
+                }
+            }
         }
     }
 }
@@ -39,23 +56,21 @@ Shield::~Shield()
     delete[] cells;
 }
 
-bool Shield::checkCollision(const GameObject &other)
+bool Shield::checkCollision(int i, int j, Bullet &other)
 {
     bool collide = false;
-    for (int i = 0; i < cellsX && !collide; i++)
+
+    if (cells[i][j].getFillColor() != sf::Color::Black)
     {
-        for (int j = 0; j < cellsY && !collide; j++)
+        collide = cells[i][j].getGlobalBounds().intersects(other.getRect());
+        if (collide)
         {
-            //collide = cells[i][j].getGlobalBounds().intersects(other.getCharacter()->getGlobalBounds());
-
-            if (collide)
-            {
-                cells[i][j].setFillColor(sf::Color::Black);
-                cells[i][j].setPosition(cellWidth * -1, cellHeight * -1);
-            }
-
+            cells[i][j].setFillColor(sf::Color::Black);
+            //cells[i][j].setPosition(cellWidth * -1, cellHeight * -1);
+            other.setActive(false);
         }
     }
+
     return collide;
 }
 
@@ -72,7 +87,38 @@ void Shield::setPosition(sf::Vector2f position)
 
 void Shield::reset()
 {
+    for (int i = 0; i < cellsX; i++)
+    {
+        for (int j = 0; j < cellsY; j++)
+        {
+            cells[i][j].setFillColor(sf::Color::Green);
 
+            if (i == 0 || i == cellsX - 1)
+            {
+                if (j == 0)
+                {
+                    cells[i][j].setFillColor(sf::Color::Black);
+                }
+            }
+
+            if (i >= 2 && i <= cellsX - 3)
+            {
+                if (j == cellsY - 1)
+                {
+                    cells[i][j].setFillColor(sf::Color::Black);
+                }
+            }
+        }
+    }
+}
+
+float Shield::getHeight()
+{
+    return this->cellsY;
+}
+float Shield::getWidth()
+{
+    return this->cellsX;
 }
 
 void Shield::draw(sf::RenderWindow *window)

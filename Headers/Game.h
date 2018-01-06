@@ -17,23 +17,32 @@ class Game
 private:
     // Window and rendering
     sf::RenderWindow* window;
+    sf::Event* event;
     int winWidth;
     int winHeight;
+    int gameState;
     float timeScale;
+    float resumeTime;
 
     // GameObjects
     Player* player;
+    std::string playerName;
+
 
     int aliensX;
     int aliensY;
     Enemy** aliens;
     int nrOfAliens;
+    int alienOffset;
+    float alienScaleFactor;
 
     GameObject** gameObjs;
     int nrOfGameObjects;
 
 
-    Shield test;
+    Shield shieldMid;
+    Shield shieldRight;
+    Shield shieldLeft;
 
     //Game textures
     sf::Texture* playerTexture;
@@ -45,17 +54,22 @@ private:
     GUI textLayer;
 
     bool loadTexture(std::string path, sf::Sprite object);
+    void shieldColDetection(Bullet& bul);
     void freeUpMemory();
     void render();
     void start();
 
 public:
-    Game(sf::RenderWindow* window);
+    Game(sf::RenderWindow* window, sf::Event* event);
     ~Game();
 
+    int getGameState();
+    void setGameState(int state);
     float getTimeScale();
     void update(float &deltaTime, float &gameTime);
     void setTimeScale(float timeScale);
+    void restart();
+    void setPlayerName(std::string name);
 
 
 };

@@ -23,9 +23,11 @@ public:
     GameObject& operator=(const GameObject &other);
 
     void setSprite(sf::Sprite* sprite);
+    void setSpriteColor(sf::Color color);
     void setPosition(sf::Vector2f position);
 
     bool checkCollision(const GameObject &other);
+    sf::FloatRect getRect() const;
 
     sf::Vector2f getPosition();
     Animator* getAnimator();

@@ -22,25 +22,29 @@ int main()
     sf::Clock clck;
 
     sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(screenWidth, screenHeight), "Space Invaders", sf::Style::Close);
-    sf::Event event;
+    sf::Event* event = new sf::Event();
 
     sf::Sprite r;
 
-    Game game = Game(window);
+    Game game = Game(window, event);
+
+    std::cout << "Player Name: ";
+    std::string playerName;
+    getline(cin, playerName);
+    game.setPlayerName(playerName);
 
     while (window->isOpen())
     {
 
         deltaTime = (float)clck.restart().asSeconds();
 
-        while (window->pollEvent(event))
+        while (window->pollEvent(*event))
         {
-            switch (event.type)
+            switch (event->type)
             {
                 case sf::Event::Closed:
                 {
                     window->close();
-                    deltaTime++;
                     break;
                 }
 
@@ -61,6 +65,7 @@ int main()
     }
 
     delete window;
+    delete event;
 
     return 0;
 }

@@ -52,7 +52,6 @@ Animator& Animator::operator= (const Animator &other)
         this->updateTime = other.updateTime;
         this->animationSpeed = other.animationSpeed;
     }
-    //std::cout << "Yo" << std::endl;
     return *this;
 }
 
@@ -72,7 +71,6 @@ void Animator::animate()
             this->frameSize.left = 0;
             this->currentFrame = 0;
         }
-        //std::cout << frameSize.left << std::endl;
         animObj->setTextureRect(this->frameSize);
         updateTime = 0.0f;
     }

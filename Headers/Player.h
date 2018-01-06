@@ -13,11 +13,11 @@ private:
     int score;
     int lives;
     bool canShoot;
+    bool alive;
     float movementSpeed;
     std::string name;
     InputManager input;
     sf::RenderWindow* window;
-
     Bullet b;
 
 public:
@@ -33,11 +33,16 @@ public:
     void fire();
     void addScore(int score);
     void setPosition(sf::Vector2f position);
+    bool kill();
+    bool isAlive();
+    void revive();
     sf::Sprite getDrawable();
     void drawBullet();
     void movement(float dt, int timeScale);
     virtual void move(sf::Vector2f direction, float dt);
     void setMovementSpeed(float speed);
+    void reset();
+    void setPlayerName(std::string name);
 
 };
 

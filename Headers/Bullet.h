@@ -22,6 +22,7 @@ public:
     void launch(sf::Vector2f position);
     void setMovementSpeed(float speed);
     void setActive(bool active);
+    void setColor(sf::Color color);
     void move(sf::Vector2f direction, float dt);
 
 

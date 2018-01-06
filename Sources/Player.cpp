@@ -8,6 +8,7 @@ Player::Player()
 {
     this->score = 0;
     this->lives = 3;
+    this->alive = true;
     this->canShoot = true;
     this->name = "?";
     this->movementSpeed = 10.0f;
@@ -21,6 +22,7 @@ Player::Player(sf::RenderWindow* window, std::string name, sf::Vector2f position
     this->score = 0;
     this->lives = 3;
     this->canShoot = true;
+    this->alive = true;
     this->name = name;
     this->movementSpeed = 20.0f;
     this->input = InputManager();
@@ -54,8 +56,19 @@ Bullet& Player::getBullet()
     return this->b;
 }
 
+bool Player::isAlive()
+{
+    return this->alive;
+}
+
+void Player::revive()
+{
+    this->alive = true;
+}
+
 void Player::movement(float dt, int timeScale)
 {
+    // Move player in desired direction
     if (input.getKey(sf::Keyboard::A) && getPosition().x > 70)
     {
         move(sf::Vector2f(-15.0f, 0.0f), dt * timeScale);
@@ -66,17 +79,24 @@ void Player::movement(float dt, int timeScale)
         move(sf::Vector2f(15.0f, 0.0f), dt * timeScale);
     }
 
-    if (input.getKey(sf::Keyboard::Space))
+    // Shoot only one bullet unitill space has been released;
+    if (input.getKey(sf::Keyboard::Space) && canShoot)
     {
-
+        canShoot = false;
         fire();
 
     }
+    else if (!input.getKey(sf::Keyboard::Space))
+    {
+        canShoot = true;
+    }
+
 
     if (b.isActive())
     {
         b.move(sf::Vector2f(0, -20), dt);
         b.draw(window);
+
     }
 }
 
@@ -107,10 +127,39 @@ void Player::move(sf::Vector2f direction, float dt)
 
 }
 
+bool Player::kill()
+{
+    bool noLivesLeft = false;
+    if (lives > 0)
+    {
+        lives--;
+    }
+    else
+    {
+        noLivesLeft = true;
+        lives--;
+    }
+    this->alive = false;
+    return noLivesLeft;
+}
+
 void Player::drawBullet()
 {
     if (b.isActive())
     {
         this->b.draw(window);
     }
+}
+
+void Player::reset()
+{
+    this->score = 0;
+    this->alive = true;
+    this->canShoot = true;
+    this->lives = 3;
+}
+
+void Player::setPlayerName(std::string name)
+{
+    this->name = name;
 }

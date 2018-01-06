@@ -13,6 +13,8 @@ public:
     ~InputManager();
 
     bool getKey(sf::Keyboard::Key inputKey) const;
+    bool getKeyDown(sf::Keyboard::Key inputKey) const;
+    bool getKeyReleased(sf::Keyboard::Key inputKey, sf::Event* event) const;
 
 };
 

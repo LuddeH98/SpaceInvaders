@@ -62,6 +62,11 @@ void GameObject::setPosition(sf::Vector2f position)
     this->character->setPosition(position);
 }
 
+void GameObject::setSpriteColor(sf::Color color)
+{
+    this->character->setColor(color);
+}
+
 sf::Vector2f GameObject::getPosition()
 {
     return this->character->getPosition();
@@ -91,5 +96,10 @@ void GameObject::draw(sf::RenderWindow* window)
 void GameObject::move(sf::Vector2f direction)
 {
     this->character->move(direction);
+}
 
+
+sf::FloatRect GameObject::getRect() const
+{
+    return this->character->getGlobalBounds();
 }

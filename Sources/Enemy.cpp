@@ -2,6 +2,8 @@
 #include "../Headers/GameObject.h"
 #include <string>
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 bool Enemy::goLeft = true;
 int Enemy::moveDown = 0;
@@ -12,12 +14,19 @@ Enemy::Enemy()
 
 }
 
-Enemy::Enemy(int alienType, sf::Vector2f position, sf::Texture* texture, sf::Vector2f scale, sf::IntRect frameSize, int maxFrames)
+Enemy::Enemy(sf::RenderWindow* window, int alienType, sf::Vector2f position, sf::Texture* texture, sf::Vector2f scale, sf::IntRect frameSize, int maxFrames)
             : GameObject (position, texture, scale, frameSize, maxFrames)
 {
     this->alienType = alienType;
     this->alive = true;
     this->startPosY = position.y;
+    this->canShoot = false;
+    this->freeFireLine = false;
+    this->window = window;
+    this->bul = Bullet(window);
+    this->bul.setColor(sf::Color::Red);
+    this->bul.setMovementSpeed(20.0f);
+
 }
 
 Enemy::~Enemy()
@@ -31,6 +40,8 @@ Enemy::Enemy(const Enemy &other) : GameObject(other)
     this->alive = other.alive;
     this->movementSpeed = other.movementSpeed;
     this->startPosY = other.startPosY;
+    this->window = other.window;
+    this->bul = other.bul;
 }
 
 Enemy& Enemy::operator=(const Enemy &other)
@@ -42,6 +53,8 @@ Enemy& Enemy::operator=(const Enemy &other)
         this->alive = other.alive;
         this->movementSpeed = other.movementSpeed;
         this->startPosY = other.startPosY;
+        this->window = other.window;
+        this->bul = other.bul;
     }
 
     return *this;
@@ -62,7 +75,6 @@ void Enemy::move(sf::Vector2f direction, float dt)
             {
                 GameObject::move((direction * -1.0f) * dt * movementSpeed);
             }
-            //std::cout << "Left: " << goLeft << std::endl;
 
         }
         else
@@ -76,7 +88,12 @@ void Enemy::move(sf::Vector2f direction, float dt)
             {
                 GameObject::move((direction) * dt * movementSpeed);
             }
-            //std::cout << "right: " << goLeft << std::endl;
+        }
+
+
+        if (this->bul.isActive())
+        {
+            this->bul.move(sf::Vector2f(0, 20), dt);
         }
 
         GameObject::animate(this->movementSpeed);
@@ -97,7 +114,70 @@ void Enemy::kill()
     this->alive = false;
 }
 
+void Enemy::revive()
+{
+    this->alive = true;
+}
+
 void Enemy::setMovementSpeed(float speed)
 {
     this->movementSpeed += speed;
+}
+
+void Enemy::setCanShoot(bool state)
+{
+    this->freeFireLine = state;
+}
+
+void Enemy::drawBullet()
+{
+    if (this->bul.isActive())
+    {
+        this->bul.draw(window);
+    }
+
+}
+
+void Enemy::shoot()
+{
+    if (freeFireLine)
+    {
+        if (canShoot)
+        {
+            if (5 > rand() % 10000)
+            {
+                this->bul.launch(this->getPosition());
+                this->bul.setActive(true);
+                canShoot = false;
+            }
+
+        }
+        else if (!this->bul.isActive() && !canShoot)
+        {
+            canShoot = true;
+        }
+        //std::cout << "yo" << std::endl;
+    }
+
+}
+
+Bullet& Enemy::getBulletBounds()
+{
+    return this->bul;
+}
+
+void Enemy::resetBullet()
+{
+    this->bul.setPosition(this->getPosition());
+    this->bul.setActive(false);
+}
+
+void Enemy::setPosition(sf::Vector2f pos)
+{
+    GameObject::setPosition(pos);
+}
+
+int Enemy::getAlienType()
+{
+    return alienType;
 }
