@@ -29,8 +29,8 @@ int main()
     Game game = Game(window, event);
 
     std::cout << "Player Name: ";
-    std::string playerName;
-    getline(cin, playerName);
+    std::string playerName = "Ron";
+    //getline(cin, playerName);
     game.setPlayerName(playerName);
 
     while (window->isOpen())

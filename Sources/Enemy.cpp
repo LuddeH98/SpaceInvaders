@@ -181,3 +181,12 @@ int Enemy::getAlienType()
 {
     return alienType;
 }
+
+void Enemy::resetMoveDown()
+{
+    this->moveDown = 0;
+}
+void Enemy::resetMovementSpeed()
+{
+    this->movementSpeed = 0.0f;
+}

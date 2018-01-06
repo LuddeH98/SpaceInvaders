@@ -18,9 +18,6 @@ private:
     bool canShoot;
     bool freeFireLine;
 
-    int alienOffset;
-    float alienScaleFactor;
-
     Bullet bul;
     sf::RenderWindow* window;
 
@@ -37,6 +34,7 @@ public:
 
     bool isAlive();
     virtual void move(sf::Vector2f direction, float dt);
+    
     void kill();
     void revive();
     void setMovementSpeed(float speed);
@@ -45,6 +43,8 @@ public:
     void shoot();
     void resetBullet();
     void setPosition(sf::Vector2f pos);
+    void resetMoveDown();
+    void resetMovementSpeed();
     int getAlienType();
 
 };

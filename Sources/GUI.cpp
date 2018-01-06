@@ -130,8 +130,8 @@ void GUI::inGame()
     for (int i = 0; i < 3; i++)
     {
         lives[i] = sf::Sprite(*livesTexture);
-        lives[i].setScale(2.0f, 2.0f);
-        lives[i].setPosition((i * 80) + 20, window->getSize().y - 100);
+        lives[i].setScale(2.5f, 2.5f);
+        lives[i].setPosition((i * 80) + 20, window->getSize().y - 80);
     }
 }
 
